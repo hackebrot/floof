@@ -2,11 +2,14 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"log"
 )
 
 func main() {
-	for _, s := range os.Args[1:] {
-		fmt.Println(s)
+	userConfig, err := LoadConfig()
+	if err != nil {
+		log.Fatal(err)
 	}
+	fmt.Println(userConfig.Gist.Username)
+	fmt.Println(userConfig.Gist.Token)
 }
