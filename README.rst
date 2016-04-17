@@ -1,6 +1,8 @@
-# floof
+floof
+=====
 
-## Usage
+Usage
+-----
 
 .. code-block:: bash
 
