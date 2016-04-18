@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os/user"
 	"path"
 
@@ -35,7 +34,6 @@ func LoadConfig() (*UserConfig, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Println("load config file", tomlFile)
 
 	var c UserConfig
 	if _, err := toml.DecodeFile(tomlFile, &c); err != nil {

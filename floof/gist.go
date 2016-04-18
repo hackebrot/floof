@@ -3,8 +3,10 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 const url = "https://api.github.com/gists"
@@ -32,7 +34,7 @@ type Gist struct {
 func (g Gist) Post(username string, token string) (gistURL string, err error) {
 	j, err := json.Marshal(g)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(j))
@@ -42,19 +44,20 @@ func (g Gist) Post(username string, token string) (gistURL string, err error) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 201 {
-		panic(resp.Status)
+		s := []string{"POST", url, resp.Status}
+		return "", errors.New(strings.Join(s, " "))
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
 
 	var r gistReponse
 	err = json.Unmarshal(body, &r)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 	return r.GistURL, nil
 }

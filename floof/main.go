@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
-	"log"
+	"os"
 )
 
 //loadFiles creates a GistFile each of which holding the contents of a file
@@ -47,22 +47,22 @@ func main() {
 
 	files := flag.Args()
 	if len(files) == 0 {
-		log.Fatal("No files given")
-		return
+		fmt.Fprintf(os.Stderr, "ERROR: %v\n", "no files given")
+		os.Exit(1)
 	}
 
 	userConfig, err := LoadConfig()
 	if err != nil {
-		log.Fatal(err)
-		return
+		fmt.Fprintf(os.Stderr, "ERROR: %v\n", err)
+		os.Exit(1)
 	}
 
 	gist := createGist(files, *description, *public)
 
 	gistURL, err := gist.Post(userConfig.Gist.Username, userConfig.Gist.Token)
 	if err != nil {
-		log.Fatal(err)
-		return
+		fmt.Fprintf(os.Stderr, "ERROR: %v\n", err)
+		os.Exit(1)
 	}
 	fmt.Println(gistURL)
 }
