@@ -8,7 +8,7 @@ import (
 )
 
 //loadFiles creates a GistFile each of which holding the contents of a file
-func loadFiles(fileNames []string, c chan *GistFile) {
+func loadFiles(fileNames []string, c chan<- *GistFile) {
 	for _, name := range fileNames {
 		content, err := ioutil.ReadFile(name)
 		if err == nil {
